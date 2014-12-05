@@ -10,7 +10,9 @@
  * @version     2.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 /**
  * is_woocommerce - Returns true if on a page which uses WooCommerce templates (cart and checkout are standard pages with shortcodes and thus are not included)
@@ -139,18 +141,27 @@ if ( ! function_exists( 'is_wc_endpoint_url' ) ) {
 	 * @param  string $endpoint
 	 * @return bool
 	 */
-	function is_wc_endpoint_url( $endpoint ) {
+	function is_wc_endpoint_url( $endpoint = false ) {
 		global $wp;
 
 		$wc_endpoints = WC()->query->get_query_vars();
 
-		if ( ! isset( $wc_endpoints[ $endpoint ] ) ) {
-			return false;
-		} else {
-			$endpoint_var = $wc_endpoints[ $endpoint ];
-		}
+		if ( $endpoint ) {
+			if ( ! isset( $wc_endpoints[ $endpoint ] ) ) {
+				return false;
+			} else {
+				$endpoint_var = $wc_endpoints[ $endpoint ];
+			}
 
-		return isset( $wp->query_vars[ $endpoint_var ] ) ? true : false;
+			return isset( $wp->query_vars[ $endpoint_var ] );
+		} else {
+			foreach ( $wc_endpoints as $key => $value ) {
+				if ( isset( $wp->query_vars[ $key ] ) ) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }
 
@@ -194,6 +205,21 @@ if ( ! function_exists( 'is_add_payment_method_page' ) ) {
 		global $wp;
 
 		return ( is_page( wc_get_page_id( 'myaccount' ) ) && isset( $wp->query_vars['add-payment-method'] ) ) ? true : false;
+	}
+}
+
+if ( ! function_exists( 'is_lost_password_page' ) ) {
+
+	/**
+	* is_lost_password_page - Returns true when viewing the lost password page.
+	*
+	* @access public
+	* @return bool
+	*/
+	function is_lost_password_page() {
+		global $wp;
+
+		return ( is_page( wc_get_page_id( 'myaccount' ) ) && isset( $wp->query_vars['lost-password'] ) ) ? true : false;
 	}
 }
 
@@ -265,7 +291,7 @@ if ( ! function_exists( 'meta_is_product_attribute' ) ) {
 	 * @return bool
 	 */
 	function meta_is_product_attribute( $name, $value, $product_id ) {
-		$product    = get_product( $product_id );
+		$product    = wc_get_product( $product_id );
 
 		if ( $product->product_type != 'variation' ) {
 			return false;
@@ -274,5 +300,29 @@ if ( ! function_exists( 'meta_is_product_attribute' ) ) {
 		$attributes = $product->get_variation_attributes();
 
 		return ( in_array( $name, array_keys( $attributes ) ) && in_array( $value, $attributes[ $name ] ) );
+	}
+}
+
+if ( ! function_exists( 'wc_tax_enabled' ) ) {
+
+	/**
+	 * Are store-wide taxes enabled?
+	 *
+	 * @return bool
+	 */
+	function wc_tax_enabled() {
+		return get_option( 'woocommerce_calc_taxes' ) === 'yes';
+	}
+}
+
+if ( ! function_exists( 'wc_prices_include_tax' ) ) {
+
+	/**
+	 * Are prices inclusive of tax?
+	 *
+	 * @return bool
+	 */
+	function wc_prices_include_tax() {
+		return get_option( 'woocommerce_prices_include_tax' ) === 'yes';
 	}
 }

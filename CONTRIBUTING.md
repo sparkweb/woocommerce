@@ -4,7 +4,7 @@ Community made patches, localisations, bug reports and contributions are always 
 
 When contributing please ensure you follow the guidelines below so that we can keep on top of things.
 
-__Note:__ 
+__Note:__
 
 GitHub is for *bug reports and contributions only* - if you have a support question or a request for a customization don't post here. Use [WooThemes Support](http://support.woothemes.com) for customer support, [WordPress.org](http://wordpress.org/support/plugin/woocommerce) for community support, and for customisations we recommend one of the following services:
 
@@ -23,7 +23,7 @@ GitHub is for *bug reports and contributions only* - if you have a support quest
 
 * Fork the repository on GitHub.
 * Make the changes to your forked repository.
-  * **Ensure you stick to the [WordPress Coding Standards](http://codex.wordpress.org/WordPress_Coding_Standards).**
+  * **Ensure you stick to the [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/php/).**
   * Ensure you use LF line endings - no crazy windows line endings. :)
 * When committing, reference your issue (#1234) and include a note about the fix.
 * Push the changes to your fork and submit a pull request on the master branch of the WooCommerce repository. Existing maintenance branches will be maintained of by WooCommerce developers.

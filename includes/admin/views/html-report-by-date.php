@@ -1,8 +1,14 @@
 <?php
 /**
- * HTML for a report with date filters in admin.
+ * Admin View: Report by Date (with date filters)
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 ?>
+
 <div id="poststuff" class="woocommerce-reports-wide">
 	<div class="postbox">
 		<h3 class="stats_range">
@@ -40,7 +46,7 @@
 					<?php if ( $legends = $this->get_chart_legend() ) : ?>
 						<ul class="chart-legend">
 							<?php foreach ( $legends as $legend ) : ?>
-								<li style="border-color: <?php echo $legend['color']; ?>" <?php if ( isset( $legend['highlight_series'] ) ) echo 'class="highlight_series" data-series="' . esc_attr( $legend['highlight_series'] ) . '"'; ?>>
+								<li style="border-color: <?php echo $legend['color']; ?>" <?php if ( isset( $legend['highlight_series'] ) ) echo 'class="highlight_series ' . ( isset( $legend['placeholder'] ) ? 'tips' : '' ) . '" data-series="' . esc_attr( $legend['highlight_series'] ) . '"'; ?> data-tip="<?php echo isset( $legend['placeholder'] ) ? $legend['placeholder'] : ''; ?>">
 									<?php echo $legend['title']; ?>
 								</li>
 							<?php endforeach; ?>

@@ -2,13 +2,15 @@
 /**
  * Adds settings to the permalinks admin settings page.
  *
- * @author 		WooThemes
- * @category 	Admin
- * @package 	WooCommerce/Admin
+ * @author      WooThemes
+ * @category    Admin
+ * @package     WooCommerce/Admin
  * @version     2.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 if ( ! class_exists( 'WC_Admin_Permalink_Settings' ) ) :
 
@@ -21,8 +23,8 @@ class WC_Admin_Permalink_Settings {
 	 * Hook in tabs.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', array( $this, 'settings_init' ) );
-		add_action( 'admin_init', array( $this, 'settings_save' ) );
+		$this->settings_init();
+		$this->settings_save();
 	}
 
 	/**
@@ -34,25 +36,25 @@ class WC_Admin_Permalink_Settings {
 
 		// Add our settings
 		add_settings_field(
-			'woocommerce_product_category_slug',      	// id
-			__( 'Product category base', 'woocommerce' ), 	// setting title
+			'woocommerce_product_category_slug',            // id
+			__( 'Product category base', 'woocommerce' ),   // setting title
 			array( $this, 'product_category_slug_input' ),  // display callback
-			'permalink',                 				// settings page
-			'optional'                  				// settings section
+			'permalink',                                    // settings page
+			'optional'                                      // settings section
 		);
 		add_settings_field(
-			'woocommerce_product_tag_slug',      		// id
-			__( 'Product tag base', 'woocommerce' ), 	// setting title
-			array( $this, 'product_tag_slug_input' ),  // display callback
-			'permalink',                 				// settings page
-			'optional'                  				// settings section
+			'woocommerce_product_tag_slug',                 // id
+			__( 'Product tag base', 'woocommerce' ),        // setting title
+			array( $this, 'product_tag_slug_input' ),       // display callback
+			'permalink',                                    // settings page
+			'optional'                                      // settings section
 		);
 		add_settings_field(
-			'woocommerce_product_attribute_slug',      	// id
-			__( 'Product attribute base', 'woocommerce' ), 	// setting title
-			array( $this, 'product_attribute_slug_input' ),  // display callback
-			'permalink',                 				// settings page
-			'optional'                  				// settings section
+			'woocommerce_product_attribute_slug',           // id
+			__( 'Product attribute base', 'woocommerce' ),  // setting title
+			array( $this, 'product_attribute_slug_input' ), // display callback
+			'permalink',                                    // settings page
+			'optional'                                      // settings section
 		);
 	}
 
@@ -96,9 +98,9 @@ class WC_Admin_Permalink_Settings {
 		$product_permalink = $permalinks['product_base'];
 
 		// Get shop page
-		$shop_page_id 	= wc_get_page_id( 'shop' );
-		$base_slug 		= ( $shop_page_id > 0 && get_page( $shop_page_id ) ) ? get_page_uri( $shop_page_id ) : _x( 'shop', 'default-slug', 'woocommerce' );
-		$product_base 	= _x( 'product', 'default-slug', 'woocommerce' );
+		$shop_page_id   = wc_get_page_id( 'shop' );
+		$base_slug      = urldecode( ( $shop_page_id > 0 && get_post( $shop_page_id ) ) ? get_page_uri( $shop_page_id ) : _x( 'shop', 'default-slug', 'woocommerce' ) );
+		$product_base   = _x( 'product', 'default-slug', 'woocommerce' );
 
 		$structures = array(
 			0 => '',
@@ -137,15 +139,15 @@ class WC_Admin_Permalink_Settings {
 			</tbody>
 		</table>
 		<script type="text/javascript">
-			jQuery(function(){
+			jQuery( function() {
 				jQuery('input.wctog').change(function() {
-					jQuery('#woocommerce_permalink_structure').val( jQuery(this).val() );
+					jQuery('#woocommerce_permalink_structure').val( jQuery( this ).val() );
 				});
 
-				jQuery('#woocommerce_permalink_structure').focus(function(){
+				jQuery('#woocommerce_permalink_structure').focus( function(){
 					jQuery('#woocommerce_custom_selection').click();
-				});
-			});
+				} );
+			} );
 		</script>
 		<?php
 	}
@@ -154,23 +156,27 @@ class WC_Admin_Permalink_Settings {
 	 * Save the settings
 	 */
 	public function settings_save() {
-		if ( ! is_admin() )
+
+		if ( ! is_admin() ) {
 			return;
+		}
 
 		// We need to save the options ourselves; settings api does not trigger save for the permalinks page
 		if ( isset( $_POST['permalink_structure'] ) || isset( $_POST['category_base'] ) && isset( $_POST['product_permalink'] ) ) {
 			// Cat and tag bases
-			$woocommerce_product_category_slug = wc_clean( $_POST['woocommerce_product_category_slug'] );
-			$woocommerce_product_tag_slug = wc_clean( $_POST['woocommerce_product_tag_slug'] );
+			$woocommerce_product_category_slug  = wc_clean( $_POST['woocommerce_product_category_slug'] );
+			$woocommerce_product_tag_slug       = wc_clean( $_POST['woocommerce_product_tag_slug'] );
 			$woocommerce_product_attribute_slug = wc_clean( $_POST['woocommerce_product_attribute_slug'] );
 
 			$permalinks = get_option( 'woocommerce_permalinks' );
-			if ( ! $permalinks )
-				$permalinks = array();
 
-			$permalinks['category_base'] 	= untrailingslashit( $woocommerce_product_category_slug );
-			$permalinks['tag_base'] 		= untrailingslashit( $woocommerce_product_tag_slug );
-			$permalinks['attribute_base'] 	= untrailingslashit( $woocommerce_product_attribute_slug );
+			if ( ! $permalinks ) {
+				$permalinks = array();
+			}
+
+			$permalinks['category_base']    = untrailingslashit( $woocommerce_product_category_slug );
+			$permalinks['tag_base']         = untrailingslashit( $woocommerce_product_tag_slug );
+			$permalinks['attribute_base']   = untrailingslashit( $woocommerce_product_attribute_slug );
 
 			// Product base
 			$product_permalink = wc_clean( $_POST['product_permalink'] );
@@ -191,6 +197,14 @@ class WC_Admin_Permalink_Settings {
 			}
 
 			$permalinks['product_base'] = untrailingslashit( $product_permalink );
+
+			// Shop base may require verbose page rules if nesting pages
+			$shop_page_id   = wc_get_page_id( 'shop' );
+			$shop_permalink = ( $shop_page_id > 0 && get_post( $shop_page_id ) ) ? get_page_uri( $shop_page_id ) : _x( 'shop', 'default-slug', 'woocommerce' );
+
+			if ( $shop_page_id && trim( $permalinks['product_base'], '/' ) === $shop_permalink ) {
+				$permalinks['use_verbose_page_rules'] = true;
+			}
 
 			update_option( 'woocommerce_permalinks', $permalinks );
 		}

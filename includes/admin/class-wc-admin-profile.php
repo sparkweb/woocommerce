@@ -2,13 +2,15 @@
 /**
  * Add extra profile fields for users in admin.
  *
- * @author 		WooThemes
- * @category 	Admin
- * @package 	WooCommerce/Admin
+ * @author      WooThemes
+ * @category    Admin
+ * @package     WooCommerce/Admin
  * @version     2.1.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 if ( ! class_exists( 'WC_Admin_Profile' ) ) :
 
@@ -45,47 +47,47 @@ class WC_Admin_Profile {
 				'title' => __( 'Customer Billing Address', 'woocommerce' ),
 				'fields' => array(
 					'billing_first_name' => array(
-							'label' => __( 'First name', 'woocommerce' ),
+							'label'       => __( 'First name', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_last_name' => array(
-							'label' => __( 'Last name', 'woocommerce' ),
+							'label'       => __( 'Last name', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_company' => array(
-							'label' => __( 'Company', 'woocommerce' ),
+							'label'       => __( 'Company', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_address_1' => array(
-							'label' => __( 'Address 1', 'woocommerce' ),
+							'label'       => __( 'Address 1', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_address_2' => array(
-							'label' => __( 'Address 2', 'woocommerce' ),
+							'label'       => __( 'Address 2', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_city' => array(
-							'label' => __( 'City', 'woocommerce' ),
+							'label'       => __( 'City', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_postcode' => array(
-							'label' => __( 'Postcode', 'woocommerce' ),
+							'label'       => __( 'Postcode', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_state' => array(
-							'label' => __( 'State/County', 'woocommerce' ),
+							'label'       => __( 'State/County', 'woocommerce' ),
 							'description' => __( 'State/County or state code', 'woocommerce' ),
 						),
 					'billing_country' => array(
-							'label' => __( 'Country', 'woocommerce' ),
+							'label'       => __( 'Country', 'woocommerce' ),
 							'description' => __( '2 letter Country code', 'woocommerce' ),
 						),
 					'billing_phone' => array(
-							'label' => __( 'Telephone', 'woocommerce' ),
+							'label'       => __( 'Telephone', 'woocommerce' ),
 							'description' => ''
 						),
 					'billing_email' => array(
-							'label' => __( 'Email', 'woocommerce' ),
+							'label'       => __( 'Email', 'woocommerce' ),
 							'description' => ''
 						)
 				)
@@ -94,39 +96,39 @@ class WC_Admin_Profile {
 				'title' => __( 'Customer Shipping Address', 'woocommerce' ),
 				'fields' => array(
 					'shipping_first_name' => array(
-							'label' => __( 'First name', 'woocommerce' ),
+							'label'       => __( 'First name', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_last_name' => array(
-							'label' => __( 'Last name', 'woocommerce' ),
+							'label'       => __( 'Last name', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_company' => array(
-							'label' => __( 'Company', 'woocommerce' ),
+							'label'       => __( 'Company', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_address_1' => array(
-							'label' => __( 'Address 1', 'woocommerce' ),
+							'label'       => __( 'Address 1', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_address_2' => array(
-							'label' => __( 'Address 2', 'woocommerce' ),
+							'label'       => __( 'Address 2', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_city' => array(
-							'label' => __( 'City', 'woocommerce' ),
+							'label'       => __( 'City', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_postcode' => array(
-							'label' => __( 'Postcode', 'woocommerce' ),
+							'label'       => __( 'Postcode', 'woocommerce' ),
 							'description' => ''
 						),
 					'shipping_state' => array(
-							'label' => __( 'State/County', 'woocommerce' ),
+							'label'       => __( 'State/County', 'woocommerce' ),
 							'description' => __( 'State/County or state code', 'woocommerce' )
 						),
 					'shipping_country' => array(
-							'label' => __( 'Country', 'woocommerce' ),
+							'label'       => __( 'Country', 'woocommerce' ),
 							'description' => __( '2 letter Country code', 'woocommerce' )
 						)
 				)
@@ -141,8 +143,9 @@ class WC_Admin_Profile {
 	 * @param mixed $user User (object) being displayed
 	 */
 	public function add_customer_meta_fields( $user ) {
-		if ( ! current_user_can( 'manage_woocommerce' ) )
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
+		}
 
 		$show_fields = $this->get_customer_meta_fields();
 
@@ -174,12 +177,17 @@ class WC_Admin_Profile {
 	 * @param mixed $user_id User ID of the user being saved
 	 */
 	public function save_customer_meta_fields( $user_id ) {
-	 	$save_fields = $this->get_customer_meta_fields();
+		$save_fields = $this->get_customer_meta_fields();
 
-	 	foreach( $save_fields as $fieldset )
-	 		foreach( $fieldset['fields'] as $key => $field )
-	 			if ( isset( $_POST[ $key ] ) )
-	 				update_user_meta( $user_id, $key, wc_clean( $_POST[ $key ] ) );
+		foreach( $save_fields as $fieldset ) {
+
+			foreach( $fieldset['fields'] as $key => $field ) {
+
+				if ( isset( $_POST[ $key ] ) ) {
+					update_user_meta( $user_id, $key, wc_clean( $_POST[ $key ] ) );
+				}
+			}
+		}
 	}
 
 	/**
@@ -190,8 +198,9 @@ class WC_Admin_Profile {
 	 */
 	public function add_api_key_field( $user ) {
 
-		if ( ! current_user_can( 'manage_woocommerce' ) )
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
+		}
 
 		$permissions = array(
 			'read'       => __( 'Read', 'woocommerce' ),
@@ -210,8 +219,14 @@ class WC_Admin_Profile {
 									<input name="woocommerce_generate_api_key" type="checkbox" id="woocommerce_generate_api_key" value="0" />
 									<span class="description"><?php _e( 'Generate API Key', 'woocommerce' ); ?></span>
 								<?php else : ?>
-									<strong><?php _e( 'Consumer Key:', 'woocommerce' ); ?>&nbsp;</strong><code id="woocommerce_api_consumer_key"><?php echo $user->woocommerce_api_consumer_key ?></code><br/>
-									<strong><?php _e( 'Consumer Secret:', 'woocommerce' ); ?>&nbsp;</strong><code id="woocommerce_api_consumer_secret"><?php echo $user->woocommerce_api_consumer_secret; ?></code><br/>
+									<div class="api-keys-wrapper">
+										<strong><?php _e( 'Consumer Key:', 'woocommerce' ); ?></strong><br /><code id="woocommerce_api_consumer_key"><?php echo $user->woocommerce_api_consumer_key; ?></code><br/><br />
+										<strong><?php _e( 'Consumer Secret:', 'woocommerce' ); ?></strong><br /><code id="woocommerce_api_consumer_secret"><?php echo $user->woocommerce_api_consumer_secret; ?></code><br/>
+									</div>
+									<div class="api-keys-get-qr">
+										<div id="qrcode_small"></div>
+									</div>
+									<div class="clear">
 									<strong><?php _e( 'Permissions:', 'woocommerce' ); ?>&nbsp;</strong><span id="woocommerce_api_key_permissions"><select name="woocommerce_api_key_permissions" id="woocommerce_api_key_permissions"><?php
 										foreach ( $permissions as $permission_key => $permission_name ) { echo '<option value="' . esc_attr( $permission_key ) . '" '.selected($permission_key, $user->woocommerce_api_key_permissions, false).'>'.esc_html( $permission_name ) . '</option>';} ?>
 									</select></span><br/>
@@ -236,7 +251,7 @@ class WC_Admin_Profile {
 
 		if ( current_user_can( 'edit_user', $user_id ) ) {
 
-			$user = wp_get_current_user();
+			$user = get_userdata( $user_id );
 
 			// creating/deleting key
 			if ( isset( $_POST['woocommerce_generate_api_key'] ) ) {
